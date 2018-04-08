@@ -13,13 +13,13 @@ public class GraphFactory {
 			// Lecture du fichier texte et Extration des identifiants des joueurs
 			List<Integer> joueursIds = new ArrayList<>();
 			try {
-				// parcours chaque ligne et enlève les 'J-' puis mémorise leurs ids
+				// parcours chaque ligne et enlï¿½ve les 'J-' puis mï¿½morise leurs ids
 				for (String ligne : Files.readAllLines(Paths.get(path))) {
 					 for (String chaine : ligne.split(" ")){
 						 if(chaine.length()>2) {
 							 String chaineFiltered = chaine.replace("J-","");
 							 int joueurId= Integer.parseInt(chaineFiltered);
-							 System.out.println("id du joueur " + joueurId);
+							 //System.out.println("id du joueur " + joueurId);
 							 joueursIds.add(joueurId);
 						 }
 					 }
@@ -32,12 +32,13 @@ public class GraphFactory {
 				if(joueurs.contains(joueursIds.get(i))==false) {
 					joueurs.add(joueursIds.get(i));
 					matchsDuJoueur.clear();
-					// Mémorisation des matchs du joueur
+					// Mï¿½morisation des matchs du joueur
 					for(int j=i;j<joueursIds.size();j++) {
-						if(joueursIds.get(j)==joueursIds.get(i)) {
+						if(joueursIds.get(j).equals(joueursIds.get(i))) {
 							matchsDuJoueur.add(j/10);
 						}
 					}
+					System.out.println("Matchs du joueur "+joueursIds.get(i)+" : "+matchsDuJoueur);
 					// Creation du graph
 					for(int k=0;k<matchsDuJoueur.size();k++) {
 						for(int l=k+1;l<matchsDuJoueur.size();l++) {
@@ -47,9 +48,13 @@ public class GraphFactory {
 								g.addEdge(matchsDuJoueur.get(k), matchsDuJoueur.get(l));
 							}
 						}
-					}
+					}	
+				}
+				if(g.vertices().contains(i/10)==false) {
+					g.addVertex(i/10);
 				}
 			}
+			System.out.println(g.vertices().size());
 		return g;
 	}
 }
