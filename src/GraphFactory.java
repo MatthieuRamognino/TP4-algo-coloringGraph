@@ -10,16 +10,17 @@ public class GraphFactory {
 		List<Integer> joueurs= new ArrayList<>();
 		List<Integer> matchsDuJoueur= new ArrayList<>();
 		UndirectedAdjGraph<Integer> g = new UndirectedAdjGraph<>();
-		
-			List<Integer> nombres = new ArrayList<>();
+			// Lecture du fichier texte et Extration des identifiants des joueurs
+			List<Integer> joueursIds = new ArrayList<>();
 			try {
+				// parcours chaque ligne et enlève les 'J-' puis mémorise leurs ids
 				for (String ligne : Files.readAllLines(Paths.get(path))) {
 					 for (String chaine : ligne.split(" ")){
 						 if(chaine.length()>2) {
-							 String test = chaine.replace("J-","");
-							 int test2= Integer.parseInt(test);
-							 System.out.println(test2);
-							 nombres.add(test2);
+							 String chaineFiltered = chaine.replace("J-","");
+							 int joueurId= Integer.parseInt(chaineFiltered);
+							 System.out.println("id du joueur " + joueurId);
+							 joueursIds.add(joueurId);
 						 }
 					 }
 				}
@@ -27,15 +28,17 @@ public class GraphFactory {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			for(int i=0;i<nombres.size();i++) {
-				if(joueurs.contains(nombres.get(i))==false) {
-					joueurs.add(nombres.get(i));
+			for(int i=0;i<joueursIds.size();i++) {
+				if(joueurs.contains(joueursIds.get(i))==false) {
+					joueurs.add(joueursIds.get(i));
 					matchsDuJoueur.clear();
-					for(int j=i;j<nombres.size();j++) {
-						if(nombres.get(j)==nombres.get(i)) {
+					// Mémorisation des matchs du joueur
+					for(int j=i;j<joueursIds.size();j++) {
+						if(joueursIds.get(j)==joueursIds.get(i)) {
 							matchsDuJoueur.add(j/10);
 						}
 					}
+					// Creation du graph
 					for(int k=0;k<matchsDuJoueur.size();k++) {
 						for(int l=k+1;l<matchsDuJoueur.size();l++) {
 							if(g.vertices().contains(matchsDuJoueur.get(k)) && 
