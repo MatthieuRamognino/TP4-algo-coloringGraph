@@ -96,25 +96,28 @@ public class UndirectedAdjGraph<Vertex extends Comparable<Vertex>> extends Graph
 	public List<Integer> coloringAlgorithm() {
 //		Initialisation de la liste colors
 		for (int i=0; i<this.vertices().size(); i++) {
-			// 0 correspond à un sommet sans couleur
+			// 0 correspond ï¿½ un sommet sans couleur
 			colors.add(0);
 		}
 		
-		// parcours le graph et crée une liste où chaque valeur correspond au degrée d'un sommet
+		// parcours le graph et crï¿½e une liste oï¿½ chaque valeur correspond au degrï¿½e d'un sommet
 		List <Integer> degrees = new ArrayList<>();
 		// remplie la liste
 		for (int sommet=0; sommet<this.vertices().size(); sommet++) {
 			degrees.add(this.outDegree(this.vertices().get(sommet)));
 		}
+		System.out.println("degrees"+degrees);
 
-		// tri cette liste dans l'ordre décroissant
+		// tri cette liste dans l'ordre dï¿½croissant
 		// pour cela on passe par une deuxieme liste: degreesTrie qui sera notre nouvelle liste de travaille
 		List <Integer> degreesTrie = new ArrayList<>();
 		for (int sommet=0; sommet<this.vertices().size(); sommet++) {
 			int idSommetMax = getIdMax(degrees);
 			degreesTrie.add(idSommetMax);
-			degrees.set(idSommetMax, 0);
+			degrees.set(idSommetMax, -1);
+			
 		}
+		System.out.println("degreesTrie"+degreesTrie);
 		
 		// tant que le graphe nest pas totalement coloree
 		while(this.colors.contains(0)) {
@@ -132,23 +135,23 @@ public class UndirectedAdjGraph<Vertex extends Comparable<Vertex>> extends Graph
 				//	values).
 				
 				// Parcours TOUS les sommets du graphe (dans l'ordre des degrees) 
-				// prend un sommet regarde si ce sommet nest pas déja coloré
-				// de plus regarde si il ne possède pas dans ses voisins un sommets colorée
+				// prend un sommet regarde si ce sommet nest pas dï¿½ja colorï¿½
+				// de plus regarde si il ne possï¿½de pas dans ses voisins un sommets colorï¿½e
 				for (int k=0; k<degreesTrie.size(); k++) {
 					List<Vertex> voisinsDuSommets = this.outNeighbors(this.vertices().get(degreesTrie.get(k)));
-					// si le sommet nes pas coloré
+					// si le sommet nes pas colorï¿½
 					if (this.colors.get(degreesTrie.get(k)) == 0) {
 						// on regarde ses voisins
 						boolean voisinColoree = false;
 						for (int j=0;j<voisinsDuSommets.size();j++) {
-							// on regarde si ils sont coloré ou non
-							if (this.colors.get((int) voisinsDuSommets.get(j)) != 0) {
-								// System.out.println("possède un voisin coloré");
+							// on regarde si ils sont colorï¿½ ou non
+							if (this.colors.get((int) voisinsDuSommets.get(j)) == colors.get(degreesTrie.get(i))) { // il faut ajouter d'autre condition
+								// System.out.println("possï¿½de un voisin colorï¿½");
 								voisinColoree = true;
 							}	
 						}
-						// si il ne possède aucun voisin coloree alors on le colore dans la même couleur que le sommet degreesTrie
-						if (!voisinColoree) {
+						// si il ne possï¿½de aucun voisin coloree alors on le colore dans la mï¿½me couleur que le sommet degreesTrie
+						if (voisinColoree==false) {
 							System.out.println(" colore le sommets : "+ degreesTrie.get(k)
 							+ " dans la couleur : " + colors.get(degreesTrie.get(i)));
 							this.colors.set(degreesTrie.get(k), colors.get(degreesTrie.get(i)));
